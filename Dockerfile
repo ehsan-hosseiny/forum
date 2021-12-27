@@ -1,6 +1,5 @@
-
-FROM php:7.4-fpm
-RUN usermod -u 1000 www-data
+FROM php:8.0-fpm-alpine
+WORKDIR /var/www
 
 ADD ./src /var/www/html
 
