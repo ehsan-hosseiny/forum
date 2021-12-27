@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Answer extends Model
+{
+    use HasFactory;
+
+    /**
+     * @return User
+     */
+    public function user(): User
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return Thread
+     */
+    public function thread(): Thread
+    {
+        return $this->belongsTo(Thread::class);
+    }
+}
