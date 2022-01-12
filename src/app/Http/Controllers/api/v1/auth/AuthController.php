@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v1\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,11 +31,7 @@ class AuthController extends Controller
 
 
         // Insert User Into Database
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+       resolve(UserRepository::class)->create($request);
 
         return response()->json(['message' => 'user created successfully'], 201);
 
