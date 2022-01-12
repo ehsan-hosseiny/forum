@@ -4,14 +4,18 @@ namespace App\Http\Controllers\api\v1\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     /**
      * Register New User
-     * $method Post
+     * @method POST
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -36,14 +40,35 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * Login User
+     * @method GET
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
     public function login(Request $request)
     {
+        // Validate Form Inputs
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        // Check User Credentials For Login
+        if (Auth::attempt($request->only(['email', 'password']))) {
+            return response()->json(Auth::user(), Response::HTTP_OK);
+        }
+
+        throw ValidationException::withMessages([
+            'email' => 'incorrect credentials.'
+        ]);
 
     }
 
     public function logout()
     {
-
+        Auth::logout();
     }
 
 }
