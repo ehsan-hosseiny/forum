@@ -29,12 +29,10 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-
         // Insert User Into Database
        resolve(UserRepository::class)->create($request);
 
-        return response()->json(['message' => 'user created successfully'], 201);
-
+        return response()->json(['message' => 'user created successfully'], Response::HTTP_CREATED);
     }
 
     /**
