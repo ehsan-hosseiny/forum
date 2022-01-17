@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Unit\api\v1\Channel;
+namespace Tests\Feature\api\v1\Channel;
 
 use App\Models\Channel;
 use App\Models\User;
