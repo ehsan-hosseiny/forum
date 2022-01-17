@@ -4,13 +4,37 @@
 namespace Tests\Unit\api\v1\Channel;
 
 use App\Models\Channel;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class ChannelTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function registerRoleAndPermissions()
+    {
+        $roleInDatabase = Role::where('name',config('permission.default_roles')[0]);
+        if ($roleInDatabase->count() < 1) {
+            foreach (config('permission.default_roles') as $role) {
+                Role::create([
+                    'name' => $role
+                ]);
+            }
+        }
+
+        $permissionInDatabase = Permission::where('name',config('permission.default_permissions')[0]);
+        if ($permissionInDatabase->count() < 1) {
+            foreach (config('permission.default_permissions') as $permission) {
+                Permission::create([
+                    'name' => $permission
+                ]);
+            }
+        }
+    }
 
     /**
      * Test All Channels List Should Be Accessible
@@ -26,13 +50,19 @@ class ChannelTest extends TestCase
      */
     public function test_create_channel_should_be_validated()
     {
-        $response = $this->postJson(route('channel.create'),[]);
+        $this->registerRoleAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
+        $response = $this->actingAs($user)->postJson(route('channel.create'),[]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function test_create_new_channel()
     {
-        $response = $this->postJson(route('channel.create'),[
+        $this->registerRoleAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
+        $response = $this->actingAs($user)->postJson(route('channel.create'),[
            'name'=>'Laravel'
         ]);
         $response->assertStatus(Response::HTTP_CREATED);
@@ -40,17 +70,23 @@ class ChannelTest extends TestCase
 
     public function test_channel_update_should_be_validate()
     {
-        $response = $this->putJson(route('channel.update'),[]);
+        $this->registerRoleAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
+        $response = $this->actingAs($user)->putJson(route('channel.update'),[]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
     }
 
     public function test_update_channel()
     {
+        $this->registerRoleAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
         $channel = Channel::factory()->create([
             'name'=>'Laravel'
         ]);
-        $response = $this->putJson(route('channel.update'),[
+        $response = $this->actingAs($user)->putJson(route('channel.update'),[
             'id'=>$channel->id,
             'name'=>'Vuejs'
         ]);
@@ -65,14 +101,20 @@ class ChannelTest extends TestCase
      */
     public function test_delete_channel_should_be_validated()
     {
-        $response = $this->deleteJson(route('channel.delete'),[]);
+        $this->registerRoleAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
+        $response = $this->actingAs($user)->deleteJson(route('channel.delete'),[]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function test_delete_channel()
     {
+        $this->registerRoleAndPermissions();
+        $user = User::factory()->create();
+        $user->givePermissionTo('channel management');
         $channel = Channel::factory()->create();
-        $response = $this->deleteJson(route('channel.delete'), [
+        $response = $this->actingAs($user)->deleteJson(route('channel.delete'), [
             'id' => $channel->id]);
         $response->assertStatus(Response::HTTP_OK);
 
