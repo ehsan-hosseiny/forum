@@ -9,6 +9,8 @@ class Thread extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /**
      * @return Channel
      */
