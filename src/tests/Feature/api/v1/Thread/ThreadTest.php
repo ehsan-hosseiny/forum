@@ -88,6 +88,34 @@ class ThreadTest extends TestCase
         $this->assertSame('Bar',$thread->title);
     }
 
+    /** @test */
+    public function can_add_best_answer_id_for_thread()
+    {
+//        $this->withExceptionHandling();
+        Sanctum::actingAs(User::factory()->create());
+        $thread = Thread::factory()->create();
+        $this->putJson(route('threads.update',[$thread]),[
+            'best_answer_id' => 1,
+
+        ])->assertSuccessful();
+        $thread->refresh();
+        $this->assertSame(1,$thread->best_answer_id);
+    }
+
+    /** @test */
+    public function can_delete_thread()
+    {
+        $thread = Thread::factory()->create([
+            'title' => 'Foo',
+            'content' => 'Bar',
+            'channel_id' => Channel::factory()->create()->id,
+        ]);
+        $response = $this->delete(route('threads.destroy', [$thread]));
+
+        $response->assertStatus(Response::HTTP_OK);
+
+    }
+
 
 }
 
