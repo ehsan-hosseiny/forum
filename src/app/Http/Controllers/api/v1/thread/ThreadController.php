@@ -65,36 +65,33 @@ class ThreadController extends Controller
             'channel_id' => 'required'
         ]);
 
-        resolve(ThreadRepository::class)->update($thread, $request);
-//        if (Gate::forUser(auth()->user())->allows('user-thread', $thread)) {
-//            resolve(ThreadRepository::class)->update($thread, $request);
-//
-//            return \response()->json([
-//                'message' => 'thread updated successfully'
-//            ], Response::HTTP_OK);
-//        }
-        return \response()->json([
-            'message' => 'thread updated successfully'
-        ], Response::HTTP_OK);
+//        resolve(ThreadRepository::class)->update($thread, $request);
+        if (Gate::forUser(auth()->user())->allows('user-thread', $thread)) {
+            resolve(ThreadRepository::class)->update($thread, $request);
 
-//        return \response()->json([
-//            'message' => 'access denied'
-//        ], Response::HTTP_FORBIDDEN);
+            return \response()->json([
+                'message' => 'thread updated successfully'
+            ], Response::HTTP_OK);
+        }
+
+        return \response()->json([
+            'message' => 'access denied'
+        ], Response::HTTP_FORBIDDEN);
     }
 
     public function destroy(Thread $thread)
     {
-//        if (Gate::forUser(auth()->user())->allows('user-thread', $thread)) {
+        if (Gate::forUser(auth()->user())->allows('user-thread', $thread)) {
             resolve(ThreadRepository::class)->destroy($thread);
 
             return \response()->json([
                 'message' => 'thread deleted successfully'
             ], Response::HTTP_OK);
-//        }
+        }
 
-//        return \response()->json([
-//            'message' => 'access denied'
-//        ], Response::HTTP_FORBIDDEN);
+        return \response()->json([
+            'message' => 'access denied'
+        ], Response::HTTP_FORBIDDEN);
     }
 
 }

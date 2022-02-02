@@ -71,12 +71,15 @@ class ThreadTest extends TestCase
     /** @test */
     public function can_update_thread()
     {
+
 //        $this->withExceptionHandling();
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $thread = Thread::factory()->create([
             'title' => 'Foo',
             'content' => 'Bar',
             'channel_id' => Channel::factory()->create()->id,
+            'user_id' => $user->id
         ]);
         $this->putJson(route('threads.update',[$thread]),[
             'title' => 'Bar',
@@ -91,9 +94,15 @@ class ThreadTest extends TestCase
     /** @test */
     public function can_add_best_answer_id_for_thread()
     {
+        $user = User::factory()->create();
 //        $this->withExceptionHandling();
-        Sanctum::actingAs(User::factory()->create());
-        $thread = Thread::factory()->create();
+        Sanctum::actingAs($user);
+        $thread = Thread::factory()->create([
+            'title' => 'Foo',
+            'content' => 'Bar',
+            'channel_id' => Channel::factory()->create()->id,
+            'user_id' => $user->id
+        ]);
         $this->putJson(route('threads.update',[$thread]),[
             'best_answer_id' => 1,
 
@@ -105,10 +114,10 @@ class ThreadTest extends TestCase
     /** @test */
     public function can_delete_thread()
     {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
         $thread = Thread::factory()->create([
-            'title' => 'Foo',
-            'content' => 'Bar',
-            'channel_id' => Channel::factory()->create()->id,
+            'user_id' => $user->id
         ]);
         $response = $this->delete(route('threads.destroy', [$thread]));
 
