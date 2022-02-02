@@ -4,3 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::resource('threads','App\Http\Controllers\api\v1\thread\ThreadController');
+
+Route::prefix('/threads')->group(function (){
+    Route::resource('answers','App\Http\Controllers\api\v1\thread\AnswerController');
+});
