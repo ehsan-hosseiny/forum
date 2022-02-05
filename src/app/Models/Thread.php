@@ -27,10 +27,8 @@ class Thread extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * @return Answer
-     */
-    public function answer(): Answer
+
+    public function answers()
     {
         return $this->hasMany(Answer::class);
     }

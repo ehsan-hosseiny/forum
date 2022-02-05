@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1\thread;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Answer;
 use App\Models\Thread;
 use App\Repositories\AnswerRepository;
 use Illuminate\Http\Request;
@@ -32,15 +33,15 @@ class AnswerController extends Controller
         return response()->json($answers, Response::HTTP_OK);
     }
 
-//    public function store(Request $request)
-//    {
-//        $request->validate([
-//            'content' => 'required',
-//            'thread_id' => 'required',
-//        ]);
-//
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required',
+            'thread_id' => 'required',
+        ]);
+
 //        // Insert Data Into DB
-//        resolve(AnswerRepository::class)->store($request);
+        resolve(AnswerRepository::class)->store($request);
 //
 //        // Get List Of User Id Which Subscribed To A Thread Id
 //        $notifiable_users_id = resolve(SubscribeRepository::class)->getNotifiableUsers($request->thread_id);
@@ -54,29 +55,29 @@ class AnswerController extends Controller
 //            auth()->user()->increment('score', 10);
 //        }
 //
-//        return \response()->json([
-//            'message' => 'answer submitted successfully'
-//        ], Response::HTTP_CREATED);
-//    }
-//
-//    public function update(Request $request, Answer $answer)
-//    {
-//        $request->validate([
-//            'content' => 'required',
-//        ]);
-//
+        return \response()->json([
+            'message' => 'answer submitted successfully'
+        ], Response::HTTP_CREATED);
+    }
+
+    public function update(Request $request, Answer $answer)
+    {
+        $request->validate([
+            'content' => 'required',
+        ]);
+
 //        if (Gate::forUser(auth()->user())->allows('user-answer', $answer)) {
-//            resolve(AnswerRepository::class)->update($request, $answer);
+            resolve(AnswerRepository::class)->update($request,$answer);
 //
-//            return \response()->json([
-//                'message' => 'answer updated successfully'
-//            ], Response::HTTP_OK);
+            return \response()->json([
+                'message' => 'answer updated successfully'
+            ], Response::HTTP_OK);
 //        }
 //
 //        return \response()->json([
 //            'message' => 'access denied'
 //        ], Response::HTTP_FORBIDDEN);
-//    }
+    }
 //
 //    public function destroy(Answer $answer)
 //    {
