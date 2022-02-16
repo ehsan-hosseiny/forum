@@ -7,8 +7,12 @@ namespace App\Http\Controllers\api\v1\thread;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Thread;
+use App\Notifications\NewReplySubmitted;
 use App\Repositories\AnswerRepository;
+use App\Repositories\SubscribeRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\ThreadRepository;
 use Illuminate\Http\JsonResponse;
@@ -42,13 +46,13 @@ class AnswerController extends Controller
 
 //        // Insert Data Into DB
         resolve(AnswerRepository::class)->store($request);
-//
-//        // Get List Of User Id Which Subscribed To A Thread Id
-//        $notifiable_users_id = resolve(SubscribeRepository::class)->getNotifiableUsers($request->thread_id);
+
+        // Get List Of User Id Which Subscribed To A Thread Id
+        $notifiable_users_id = resolve(SubscribeRepository::class)->getNotifiableUsers($request->thread_id);
 //        // Get User Instance From Id
-//        $notifiable_users = resolve(UserRepository::class)->find($notifiable_users_id);
+        $notifiable_users = resolve(UserRepository::class)->find($notifiable_users_id);
 //        // Send NewReplySubmitted Notification To Subscribed Users
-//        Notification::send($notifiable_users, new NewReplySubmitted(Thread::find($request->thread_id)));
+        Notification::send($notifiable_users, new NewReplySubmitted(Thread::find($request->thread_id)));
 //
 //        // Increase User Score
 //        if (Thread::find($request->input('thread_id'))->user_id !== auth()->id()) {
