@@ -9,6 +9,8 @@ class Subscribe extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /**
      * @return User
      */
