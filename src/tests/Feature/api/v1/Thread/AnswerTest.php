@@ -36,7 +36,6 @@ class AnswerTest extends TestCase
     /** @test */
     public function can_submit_new_answer_for_thread()
     {
-//        $this->withoutExceptionHandling();
         $thread = Thread::factory()->create();
         Sanctum::actingAs(User::factory()->create());
         $response = $this->postJson(route('answers.store'), [
@@ -46,6 +45,24 @@ class AnswerTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJson(['message' => 'answer submitted successfully']);
         $this->assertTrue($thread->answers()->where('content', 'Foo')->exists());
+    }
+
+    /** @test  */
+    public function user_score_will_increase_by_submit_new_answer()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $thread = Thread::factory()->create();
+        $response = $this->postJson(route('answers.store'), [
+            'content' => 'Foo',
+            'thread_id' => $thread->id
+        ]);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $user->refresh();
+        $this->assertEquals(10,$user->score);
+
+
+
     }
 
     /** @test */

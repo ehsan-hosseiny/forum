@@ -55,10 +55,10 @@ class AnswerController extends Controller
         Notification::send($notifiable_users, new NewReplySubmitted(Thread::find($request->thread_id)));
 //
 //        // Increase User Score
-//        if (Thread::find($request->input('thread_id'))->user_id !== auth()->id()) {
-//            auth()->user()->increment('score', 10);
-//        }
-//
+        if (Thread::find($request->input('thread_id'))->user_id !== auth()->id()) {
+            auth()->user()->increment('score', 10);
+        }
+
         return \response()->json([
             'message' => 'answer submitted successfully'
         ], Response::HTTP_CREATED);
