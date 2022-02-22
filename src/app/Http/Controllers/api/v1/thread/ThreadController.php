@@ -16,13 +16,13 @@ use Illuminate\Support\Str;
 
 class ThreadController extends Controller
 {
-//    public function __construct()
-//    {
-//        $this->middleware(['user-block'])->except([
-//            'index',
-//            'show',
-//        ]);
-//    }
+    public function __construct()
+    {
+        $this->middleware(['user-block'])->except([
+            'index',
+            'show',
+        ]);
+    }
 
     public function index()
     {

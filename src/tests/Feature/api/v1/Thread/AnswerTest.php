@@ -28,6 +28,7 @@ class AnswerTest extends TestCase
     /** @test */
     public function create_answer_should_be_validate()
     {
+        Sanctum::actingAs(User::factory()->create());
         $response = $this->postJson(route('answers.store'),[]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
         $response->assertJsonValidationErrors(['content', 'thread_id']);
@@ -61,13 +62,12 @@ class AnswerTest extends TestCase
         $user->refresh();
         $this->assertEquals(10,$user->score);
 
-
-
     }
 
     /** @test */
     public function update_answer_should_be_validate()
     {
+        Sanctum::actingAs(User::factory()->create());
         $answer = Answer::factory()->create();
         $response = $this->putJson(route('answers.update',$answer),[]);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -105,14 +105,12 @@ class AnswerTest extends TestCase
         $answer = Answer::factory()->create([
             'user_id' => $user->id
         ]);
-
         $response = $this->delete(route('answers.destroy',[$answer]));
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson(
             ['message' => 'answer deleted successfully']
         );
-
         $this->assertFalse(Thread::find($answer->thread_id)->answers()->whereContent($answer->content)->exists());
     }
 }

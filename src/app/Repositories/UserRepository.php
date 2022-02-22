@@ -29,4 +29,9 @@ class UserRepository
 
     }
 
+    public function leaderboards()
+    {
+        return User::orderBy('score','desc')->paginate(20);
+    }
+
 }
