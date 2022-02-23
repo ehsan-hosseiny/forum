@@ -34,4 +34,9 @@ class UserRepository
         return User::orderBy('score','desc')->paginate(20);
     }
 
+    public function isBlock(): bool
+    {
+        return (bool)auth()->user()->is_block;
+    }
+
 }
