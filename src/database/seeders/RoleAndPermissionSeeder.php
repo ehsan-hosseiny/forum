@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -33,5 +34,7 @@ class RoleAndPermissionSeeder extends Seeder
                 ]);
             }
         }
+
+        Thread::factory(100)->create();
     }
 }

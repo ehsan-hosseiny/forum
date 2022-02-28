@@ -14,7 +14,7 @@ class Thread extends Model
     /**
      * @return Channel
      */
-    public function channel(): Channel
+    public function channel()
     {
         return $this->belongsTo(Channel::class);
     }
@@ -22,7 +22,7 @@ class Thread extends Model
     /**
      * @return User
      */
-    public function user(): User
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
